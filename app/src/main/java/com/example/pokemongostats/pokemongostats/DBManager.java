@@ -96,6 +96,7 @@ public class DBManager extends SQLiteOpenHelper {
      * @param num La cantidad del item.
      * @return true si se pudo insertar (o modificar), false en otro caso.
      */
+    /*
     public boolean insertaItem(String nombre, int num)
     {
         Cursor cursor = null;
@@ -142,6 +143,7 @@ public class DBManager extends SQLiteOpenHelper {
      * @param nombre El identificador del elemento.
      * @return true si se pudo eliminar, false en otro caso.
      */
+    /*
     public boolean eliminaItem(String nombre)
     {
         boolean toret = false;
@@ -160,4 +162,5 @@ public class DBManager extends SQLiteOpenHelper {
 
         return toret;
     }
+    */
 }

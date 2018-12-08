@@ -1,0 +1,32 @@
+{
+    "formules": [
+    {
+      "formule": "Linear Motion",
+      "url": "qp1"
+    },
+    {
+      "formule": "Constant Acceleration Motion",
+      "url": "qp2"
+    },
+    {
+      "formule": "Projectile Motion",
+      "url": "qp3"
+    },
+    {
+      "formule": "Force",
+      "url": "qp4"
+    },
+    {
+      "formule": "Work, Power, Energy",
+      "url": "qp5"
+    },
+    {
+      "formule": "Rotary Motion",
+      "url": "qp6"
+    },
+    {
+      "formule": "Harmonic Motion",
+      "url": "qp7"
+    }
+    ]
+}
