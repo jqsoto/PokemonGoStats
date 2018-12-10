@@ -39,15 +39,15 @@ public class DBManager extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             db.execSQL( "CREATE TABLE IF NOT EXISTS " + TABLA_POKEMON + "( "
-                    + POKEMON_COL_NUMERO + " string(255) PRIMARY KEY NOT NULL, "
+                    + POKEMON_COL_NUMERO + " integer PRIMARY KEY NOT NULL, "
                     + POKEMON_COL_NOMBRE + " string(30) NOT NULL,"
                     + POKEMON_COL_TIPO1 + " string(15) NOT NULL,"
                     + POKEMON_COL_TIPO2 + " string(15) ,"
                     + POKEMON_COL_ATAQUE + " integer NOT NULL,"
                     + POKEMON_COL_DEFENSA + " integer NOT NULL, "
                     + POKEMON_COL_RESISTENCIA + " integer NOT NULL, "
-                    + POKEMON_COL_EVOLUCION + " string(30), "
-                    + POKEMON_COL_CARAMELOS_EVOLUCION + " integer NOT NULL, "
+                    + POKEMON_COL_EVOLUCION + " string(50), "
+                    + POKEMON_COL_CARAMELOS_EVOLUCION + " string(10) NOT NULL, "
                     + POKEMON_COL_KMDISTANCIA + " integer NOT NULL"
                     + " )");
             db.setTransactionSuccessful();
@@ -79,7 +79,7 @@ public class DBManager extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    /** Devuelve todas los pokemons en la BD
+    /** Devuelve todos los pokemons en la BD
      * @return Un Cursor con los pokemons. */
     public Cursor getPokemons()
     {
@@ -87,41 +87,41 @@ public class DBManager extends SQLiteOpenHelper {
                 null, null, null, null, null, null );
     }
 
+    /** Devuelve un Pokemno de la BD
+     *  @param @String El id del pokemon.
+     * @return Un Cursor con el Pokemon.
+     */
+    public Cursor getPokemon(String id){
+        return this.getReadableDatabase().query( TABLA_POKEMON,
+                null, POKEMON_COL_NUMERO + "=?" , new String[]{ id }, null, null, null );
+    }
+    
 
-
-    /*********************************************/
-
-    /** Inserta un nuevo item.
-     * @param nombre El nombre del item.
-     * @param num La cantidad del item.
+    /** Inserta un nuevo Pokemon.
+     * @param @pokemon El Objeto pokemon.
      * @return true si se pudo insertar (o modificar), false en otro caso.
      */
-    /*
-    public boolean insertaItem(String nombre, int num)
+
+    public boolean insertarPokemon(Pokemon pokemon)
     {
-        Cursor cursor = null;
         boolean toret = false;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put( COMPRA_COL_NOMBRE, nombre );
-        values.put( COMPRA_COL_NUM, num );
+        values.put( POKEMON_COL_NUMERO, pokemon.getNumeroPokedex() );
+        values.put( POKEMON_COL_NOMBRE, pokemon.getNombre() );
+        values.put( POKEMON_COL_TIPO1, pokemon.getTipo_1() );
+        values.put( POKEMON_COL_TIPO2, pokemon.getTipo_2() );
+        values.put( POKEMON_COL_ATAQUE, pokemon.getAtaque() );
+        values.put( POKEMON_COL_DEFENSA, pokemon.getDefensa() );
+        values.put( POKEMON_COL_RESISTENCIA, pokemon.getResistencia() );
+        values.put( POKEMON_COL_EVOLUCION, pokemon.getEvolucion() );
+        values.put( POKEMON_COL_CARAMELOS_EVOLUCION, pokemon.getCaramelos_evolucion() );
+        values.put( POKEMON_COL_KMDISTANCIA, pokemon.getCaramelos_km_distancia() );
 
         try {
             db.beginTransaction();
-            cursor = db.query( TABLA_COMPRA,
-                    null,
-                    COMPRA_COL_NOMBRE + "=?",
-                    new String[]{ nombre },
-                    null, null, null, null );
-
-            if ( cursor.getCount() > 0 ) {
-                db.update( TABLA_COMPRA,
-                        values, COMPRA_COL_NOMBRE + "= ?", new String[]{ nombre } );
-            } else {
-                db.insert( TABLA_COMPRA, null, values );
-            }
-
+            db.insert( TABLA_POKEMON, null, values );
             db.setTransactionSuccessful();
             toret = true;
         } catch(SQLException exc)
@@ -129,13 +129,8 @@ public class DBManager extends SQLiteOpenHelper {
             Log.e( "DBManager.inserta", exc.getMessage() );
         }
         finally {
-            if ( cursor != null ) {
-                cursor.close();
-            }
-
             db.endTransaction();
         }
-
         return toret;
     }
 
