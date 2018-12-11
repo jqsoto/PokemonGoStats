@@ -1,13 +1,28 @@
 package com.example.pokemongostats.pokemongostats;
 
+import android.app.DownloadManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -37,7 +52,20 @@ public class PokemonArrayAdapter extends ArrayAdapter {
         lblPokemonNumber.setText( Integer.toString(POKEMON.getNumeroPokedex()) );
         lblPokemonName.setText( POKEMON.getNombre() );
 
-        this.getTypeImg(view, POKEMON);
+        ImageView pokeType1 = view.findViewById( R.id.pokeType1 );
+
+        /*
+        try{
+            new ImageFinder(pokeType1).doInBackground(new URL("http://pokeapi.co/media/sprites/pokemon/female/25.png"));
+        }catch(MalformedURLException e) {
+            e.printStackTrace();
+        }
+*/
+        //this.getTypeImg(view, POKEMON);
+
+        queue = Volley.newRequestQueue( CONTEXT );
+
+        this.getImages(String.valueOf(POKEMON.getNumeroPokedex()));
 
 
         return view;
@@ -106,7 +134,7 @@ public class PokemonArrayAdapter extends ArrayAdapter {
                 break;
         }
 
-        if(POKEMON.getTipo_2()!=null && !POKEMON.getTipo_2().isEmpty() && !POKEMON.getTipo_2().equals("null")){
+        if(!POKEMON.getTipo_2().equals("vacio")){
             switch (POKEMON.getTipo_2()){
                 case "dragon":
                     pokeType2.setImageResource(R.drawable.type_dragon);
@@ -166,6 +194,50 @@ public class PokemonArrayAdapter extends ArrayAdapter {
                     break;
             }
         }
+        else{
+            pokeType2.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+
+    private RequestQueue queue;
+
+    private void getImages(String id){
+
+
+
+        final String url = "http://pokeapi.co/api/v2/pokemon/" + id;
+
+        /*
+        JsonObjectRequest requets = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        });*/
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try{
+                    JSONObject imagenes = response.getJSONObject("sprites");
+                    Log.i("tag", "entra imagenes ---- "  + url );
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+        });
+
+        queue.add(request);
     }
 
 

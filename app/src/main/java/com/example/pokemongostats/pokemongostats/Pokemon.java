@@ -9,7 +9,7 @@ public class Pokemon {
         this.numeroPokedex = numeroPokedex;
         this.nombre = nombre;
         this.tipo_1 = tipo_1;
-        this.tipo_2 = tipo_2;
+        this.setTipo_2(tipo_2);
         this.ataque = ataque;
         this.defensa = defensa;
         this.resistencia = resistencia;
@@ -30,6 +30,13 @@ public class Pokemon {
     public String getEvolucion() {return evolucion;}
     public String getCaramelos_evolucion() {return caramelos_evolucion;}
     public int getCaramelos_km_distancia() {return caramelos_km_distancia;}
+
+    public void setTipo_2(String tipo_2) {
+        if(tipo_2 != null)
+            this.tipo_2 = tipo_2;
+        else
+            this.tipo_2 = "vacio";
+    }
 
     /*public String toString()
     {
