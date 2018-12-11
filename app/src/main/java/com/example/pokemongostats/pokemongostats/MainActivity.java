@@ -1,13 +1,10 @@
 package com.example.pokemongostats.pokemongostats;
 
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,9 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         pokemonList = this.gestorDB.getPokemons();
 
-       this.creaLista();
-
-
+        this.creaLista();
 
     }
 
@@ -47,9 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public void onPause()
     {
         super.onPause();
-
         this.gestorDB.close();
-        //this.adaptadorDB.getCursor().close();
     }
 
     private String readJSON(){
@@ -157,15 +150,8 @@ public class MainActivity extends AppCompatActivity {
     {
         recyclerPokemons = (RecyclerView) this.findViewById( R.id.pokemonList );
         recyclerPokemons.setLayoutManager(new LinearLayoutManager(this));
-
-
-
         this.adapterList = new AdaptadorPokemons( this.pokemonList , this);
         recyclerPokemons.setAdapter(adapterList);
-    }
-
-    public DBManager gmanetDBManager() {
-        return this.gestorDB;
     }
 
 

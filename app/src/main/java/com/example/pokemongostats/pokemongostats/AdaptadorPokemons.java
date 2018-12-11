@@ -58,7 +58,6 @@ public class AdaptadorPokemons extends RecyclerView.Adapter<AdaptadorPokemons.Vi
                     }
                 })
                 .into(viewHolderPokemons.pokeImg);
-        //viewHolderPokemons.pokeImg.setVisibility(View.VISIBLE);
 
         viewHolderPokemons.pokemonNumber.setText(String.valueOf(listaPokemons.get(i).getNumeroPokedex()));
         viewHolderPokemons.pokemonName.setText(listaPokemons.get(i).getNombre());
