@@ -1,18 +1,19 @@
 package com.example.pokemongostats.pokemongostats;
 
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,20 +22,36 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.gestorDB = DBManager.getManager( this.getApplicationContext() ); // Conexión con la BD
+
         checkData();
 
-        Log.v("tag", "message");
+        pokemonList = this.gestorDB.getPokemons();
+
+       this.creaLista();
+
+
 
     }
 
-
+    /* Comprueba si y ahay datos cargados en la BD*/
     private void checkData(){
-
-        chargeJSON();
+        if(!this.gestorDB.hasData()){
+            this.chargeJSON();
+        }
     }
 
-    private String loadJSON(){
-            String json = null;
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        this.gestorDB.close();
+        //this.adaptadorDB.getCursor().close();
+    }
+
+    private String readJSON(){
+            String json;
             try {
                 InputStream is = getAssets().open("stats.json");
                 int size = is.available();
@@ -43,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 is.close();
                 json = new String(buffer, "UTF-8");
             } catch (IOException ex) {
-                //Log.v("tag", "loadJSONEXCEPTION");
                 ex.printStackTrace();
                 return null;
             }
@@ -52,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void chargeJSON(){
         try {
-            JSONObject obj = new JSONObject(loadJSON());
+            JSONObject obj = new JSONObject(readJSON());
             JSONArray m_jArry = obj.getJSONArray("templates");
             ArrayList<Pokemon> pokemonList = new ArrayList<>();
 
@@ -61,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 String pokemonName = null;
                 String type1 = null;
                 String type2 = null;
-                String type1Split = null;
+                String type1Split;
                 String type2Split = null;
                 int pokemonStamina = 0;
                 int pokemonAttack = 0;
@@ -119,9 +135,36 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            this.insertPokemons(pokemonList);
+
         } catch (JSONException e) {
             Log.v("tag", e.getMessage());
             e.printStackTrace();
         }
     }
+
+    /* Recorre el Array List con los datos de los pokemons y llama al metodo insertarPokemon*/
+    private void insertPokemons(ArrayList<Pokemon> pokemonList){
+        for (Pokemon pokemon : pokemonList ){
+            System.out.println("Insertando en BD -- Pokemon: " + pokemon.getNumeroPokedex() + " ( " + pokemon.getNombre() + " )" );
+            this.gestorDB.insertarPokemon(pokemon);
+        }
+    }
+
+    private void creaLista()
+    {
+        final ListView lvItems = this.findViewById( R.id.pokemonList );
+        this.adapterList = new PokemonArrayAdapter( this, this.pokemonList );
+        lvItems.setAdapter( this.adapterList );
+    }
+
+    public DBManager gmanetDBManager() {
+        return this.gestorDB;
+    }
+
+
+    private DBManager gestorDB;
+    private PokemonArrayAdapter adapterList;
+    private ArrayList<Pokemon> pokemonList;
+    //private SimpleCursorAdapter adaptadorDB;
 }

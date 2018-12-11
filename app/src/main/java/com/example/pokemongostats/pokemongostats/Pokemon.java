@@ -17,7 +17,7 @@ public class Pokemon {
         this.caramelos_evolucion = caramelos_evolucion;
         this.caramelos_km_distancia = caramelos_km_distancia;
 
-        this.prueba();
+        //this.prueba();
     }
 
     public int getNumeroPokedex() {return numeroPokedex;}
@@ -31,7 +31,7 @@ public class Pokemon {
     public String getCaramelos_evolucion() {return caramelos_evolucion;}
     public int getCaramelos_km_distancia() {return caramelos_km_distancia;}
 
-    public String toString()
+    /*public String toString()
     {
         String toret = "";
 
@@ -48,7 +48,7 @@ public class Pokemon {
         }
         return toret;
 
-    }
+    }*/
 
     public void prueba(){
         //Log.i("tag", "Pokemon Numero: " );
@@ -62,7 +62,7 @@ public class Pokemon {
         System.out.println("Evolucion: " + this.getEvolucion());
         System.out.println("Caramelos evolucion: " + this.getCaramelos_evolucion());
         System.out.println("Caramelos Distancia: " + this.getCaramelos_km_distancia());
-        System.out.println();
+        System.out.println(" ------------ ");
     }
 
     private int numeroPokedex;

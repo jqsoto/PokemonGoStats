@@ -8,10 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /** Maneja el acceso a la base de datos. */
 public class DBManager extends SQLiteOpenHelper {
     public static final String DB_NOMBRE = "PokemonGoDB";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 3;
 
     public static final String TABLA_POKEMON = "pokemon";
     public static final String POKEMON_COL_NUMERO = "_id";
@@ -25,10 +27,21 @@ public class DBManager extends SQLiteOpenHelper {
     public static final String POKEMON_COL_CARAMELOS_EVOLUCION = "caramelosEvolucion";
     public static final String POKEMON_COL_KMDISTANCIA = "kmdistancia";
 
-    public DBManager(Context context)
+    private DBManager(Context context)
     {
         super( context, DB_NOMBRE, null, DB_VERSION);
     }
+
+    private static DBManager instancia;
+
+    public static DBManager getManager(Context context)
+    {
+        if ( instancia == null ) {
+            instancia = new DBManager(context);
+        }
+        return instancia;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db)
@@ -47,7 +60,7 @@ public class DBManager extends SQLiteOpenHelper {
                     + POKEMON_COL_DEFENSA + " integer NOT NULL, "
                     + POKEMON_COL_RESISTENCIA + " integer NOT NULL, "
                     + POKEMON_COL_EVOLUCION + " string(50), "
-                    + POKEMON_COL_CARAMELOS_EVOLUCION + " string(10) NOT NULL, "
+                    + POKEMON_COL_CARAMELOS_EVOLUCION + " string(10), "
                     + POKEMON_COL_KMDISTANCIA + " integer NOT NULL"
                     + " )");
             db.setTransactionSuccessful();
@@ -79,23 +92,73 @@ public class DBManager extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+
     /** Devuelve todos los pokemons en la BD
      * @return Un Cursor con los pokemons. */
-    public Cursor getPokemons()
+    public ArrayList<Pokemon> getPokemons()
     {
-        return this.getReadableDatabase().query( TABLA_POKEMON,
+        ArrayList<Pokemon> pokemonList = new ArrayList<>();
+        Cursor cursor = this.getReadableDatabase().query( TABLA_POKEMON,
                 null, null, null, null, null, null );
+
+        if ( cursor.moveToFirst() ) {
+            do {
+                pokemonList.add(new Pokemon(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_NOMBRE )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO1 )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO2 )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_ATAQUE )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_DEFENSA )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_RESISTENCIA )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_EVOLUCION )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_CARAMELOS_EVOLUCION )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_KMDISTANCIA ))));
+            } while ( cursor.moveToNext() );
+        }
+        cursor.close();
+        return pokemonList;
     }
 
     /** Devuelve un Pokemno de la BD
      *  @param @String El id del pokemon.
      * @return Un Cursor con el Pokemon.
      */
-    public Cursor getPokemon(String id){
-        return this.getReadableDatabase().query( TABLA_POKEMON,
+    public Pokemon getPokemon(String id){
+        Cursor cursor =  this.getReadableDatabase().query( TABLA_POKEMON,
                 null, POKEMON_COL_NUMERO + "=?" , new String[]{ id }, null, null, null );
+        Pokemon pokemon = null;
+        if(cursor.moveToFirst() ){
+            pokemon =  new Pokemon(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
+                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_NOMBRE )),
+                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO1 )),
+                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO2 )),
+                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_ATAQUE )),
+                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_DEFENSA )),
+                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_RESISTENCIA )),
+                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_EVOLUCION )),
+                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_CARAMELOS_EVOLUCION )),
+                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_KMDISTANCIA )));
+
+        }
+
+        cursor.close();
+        return pokemon;
+
     }
-    
+
+
+    public boolean hasData(){
+        Cursor cursor = null;
+        cursor = this.getReadableDatabase().query( TABLA_POKEMON,
+                null, null, null, null, null, null );
+
+        if ( cursor.getCount() > 0 ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /** Inserta un nuevo Pokemon.
      * @param @pokemon El Objeto pokemon.
