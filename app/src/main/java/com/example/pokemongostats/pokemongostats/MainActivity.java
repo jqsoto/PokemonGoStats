@@ -3,6 +3,8 @@ package com.example.pokemongostats.pokemongostats;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -153,9 +155,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void creaLista()
     {
-        final ListView lvItems = this.findViewById( R.id.pokemonList );
-        this.adapterList = new PokemonArrayAdapter( this, this.pokemonList );
-        lvItems.setAdapter( this.adapterList );
+        recyclerPokemons = (RecyclerView) this.findViewById( R.id.pokemonList );
+        recyclerPokemons.setLayoutManager(new LinearLayoutManager(this));
+
+
+
+        this.adapterList = new AdaptadorPokemons( this.pokemonList , this);
+        recyclerPokemons.setAdapter(adapterList);
     }
 
     public DBManager gmanetDBManager() {
@@ -164,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private DBManager gestorDB;
-    private PokemonArrayAdapter adapterList;
+    private AdaptadorPokemons adapterList;
     private ArrayList<Pokemon> pokemonList;
-    //private SimpleCursorAdapter adaptadorDB;
+    private RecyclerView recyclerPokemons;
 }

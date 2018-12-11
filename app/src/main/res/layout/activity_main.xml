@@ -12,13 +12,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/pokemonList"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true" />
 
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/pokemonList"
+            tools:layoutManager="android.support.v7.widget.GridLayoutManager"
+            tools:orientation="vertical"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,17 +21,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.google.gson.internal.GsonBuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import retrofit2.Retrofit;
+
 public class PokemonArrayAdapter extends ArrayAdapter {
 
+    Context context;
 
     public PokemonArrayAdapter(@NonNull Context context, ArrayList<Pokemon> pokemonList) {
         super(context, 0, pokemonList);
+        this.context = context;
     }
 
     @Override
@@ -52,7 +59,7 @@ public class PokemonArrayAdapter extends ArrayAdapter {
         lblPokemonNumber.setText( Integer.toString(POKEMON.getNumeroPokedex()) );
         lblPokemonName.setText( POKEMON.getNombre() );
 
-        ImageView pokeType1 = view.findViewById( R.id.pokeType1 );
+        //ImageView pokeType1 = view.findViewById( R.id.pokeType1 );
 
         /*
         try{
@@ -63,16 +70,17 @@ public class PokemonArrayAdapter extends ArrayAdapter {
 */
         //this.getTypeImg(view, POKEMON);
 
-        queue = Volley.newRequestQueue( CONTEXT );
+       // queue = Volley.newRequestQueue( CONTEXT );
 
-        this.getImages(String.valueOf(POKEMON.getNumeroPokedex()));
+        //this.getImages(String.valueOf(POKEMON.getNumeroPokedex()));
 
+           //this.chargeImages(POKEMON);
 
         return view;
     }
 
-    private void getTypeImg(View view, Pokemon POKEMON){
-        ImageView pokeType1 = view.findViewById( R.id.pokeType1 );
+    //private void getTypeImg(View view, Pokemon POKEMON){
+        /*ImageView pokeType1 = view.findViewById( R.id.pokeType1 );
         ImageView pokeType2 = view.findViewById( R.id.pokeType2 );
 
         switch (POKEMON.getTipo_1()){
@@ -198,18 +206,29 @@ public class PokemonArrayAdapter extends ArrayAdapter {
             pokeType2.setVisibility(View.INVISIBLE);
         }
     }
+    */
+        /*
+
+    private Retrofit retrofit;
+
+    private void chargeImages(RecyclerView.ViewHolder holder, Pokemon pokemon){
+        Log.i("tag", "http://pokeapi.co/media/sprites/pokemon/" + pokemon.getNumeroPokedex() + ".png");
+
+       /* Glide.with(getContext()).load("http://pokeapi.co/media/sprites/pokemon/" + pokemon.getNumeroPokedex() + ".png")
+        .into(holder.pokeType1 );*/
+    //}
 
 
-
+/*
     private RequestQueue queue;
 
     private void getImages(String id){
 
 
-
+        //"http://pokeapi.co/media/sprites/pokemon/id"
         final String url = "http://pokeapi.co/api/v2/pokemon/" + id;
 
-        /*
+
         JsonObjectRequest requets = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -217,6 +236,7 @@ public class PokemonArrayAdapter extends ArrayAdapter {
             }
         });*/
 
+        /*
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -239,6 +259,6 @@ public class PokemonArrayAdapter extends ArrayAdapter {
 
         queue.add(request);
     }
-
+*/
 
 }
