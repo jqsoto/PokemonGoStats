@@ -5,11 +5,13 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +26,7 @@ public class AdaptadorPokemons extends RecyclerView.Adapter<AdaptadorPokemons.Vi
 
     private ArrayList<Pokemon> listaPokemons;
     private Context context;
+    private static final String TAG = "AdaptadorPokemons";
 
     public AdaptadorPokemons(ArrayList<Pokemon> listaPokemons, Context context){
         this.listaPokemons = listaPokemons;
@@ -59,6 +62,12 @@ public class AdaptadorPokemons extends RecyclerView.Adapter<AdaptadorPokemons.Vi
                 })
                 .into(viewHolderPokemons.pokeImg);
 
+        viewHolderPokemons.parentLayout.setOnClickListener((view) -> {
+
+        });
+
+
+
         viewHolderPokemons.pokemonNumber.setText(String.valueOf(listaPokemons.get(i).getNumeroPokedex()));
         viewHolderPokemons.pokemonName.setText(listaPokemons.get(i).getNombre());
 
@@ -74,14 +83,16 @@ public class AdaptadorPokemons extends RecyclerView.Adapter<AdaptadorPokemons.Vi
         ImageView pokeImg;
         TextView pokemonNumber, pokemonName;
         ProgressBar progress;
+        RelativeLayout parentLayout;
 
 
         public ViewHolderPokemons(@NonNull View itemView) {
             super(itemView);
-            pokeImg = (ImageView) itemView.findViewById(R.id.pokeImg);
-            pokemonNumber = (TextView) itemView.findViewById(R.id.pokemonNumber);
-            pokemonName = (TextView) itemView.findViewById(R.id.pokemonName);
-            progress = (ProgressBar) itemView.findViewById(R.id.progress);
+            pokeImg = itemView.findViewById(R.id.pokeImg);
+            pokemonNumber = itemView.findViewById(R.id.pokemonNumber);
+            pokemonName = itemView.findViewById(R.id.pokemonName);
+            progress = itemView.findViewById(R.id.progress);
+            parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
 }

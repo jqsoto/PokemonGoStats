@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void creaLista()
     {
-        recyclerPokemons = (RecyclerView) this.findViewById( R.id.pokemonList );
+        recyclerPokemons = this.findViewById( R.id.pokemonList );
         recyclerPokemons.setLayoutManager(new LinearLayoutManager(this));
         this.adapterList = new AdaptadorPokemons( this.pokemonList , this);
         recyclerPokemons.setAdapter(adapterList);
