@@ -2,6 +2,7 @@ package com.example.pokemongostats.pokemongostats;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -148,8 +149,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void creaLista()
     {
+        layoutManager = new GridLayoutManager(MainActivity.this, 3);
         recyclerPokemons = this.findViewById( R.id.pokemonList );
-        recyclerPokemons.setLayoutManager(new LinearLayoutManager(this));
+        recyclerPokemons.setHasFixedSize(true);
+        recyclerPokemons.setLayoutManager(layoutManager);
+
         this.adapterList = new AdaptadorPokemons( this.pokemonList , this);
         recyclerPokemons.setAdapter(adapterList);
     }
@@ -159,4 +163,5 @@ public class MainActivity extends AppCompatActivity {
     private AdaptadorPokemons adapterList;
     private ArrayList<Pokemon> pokemonList;
     private RecyclerView recyclerPokemons;
+    private RecyclerView.LayoutManager layoutManager;
 }

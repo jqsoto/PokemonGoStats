@@ -1,17 +1,18 @@
 package com.example.pokemongostats.pokemongostats;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,7 +42,7 @@ public class AdaptadorPokemons extends RecyclerView.Adapter<AdaptadorPokemons.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdaptadorPokemons.ViewHolderPokemons viewHolderPokemons, int i) {
+    public void onBindViewHolder(@NonNull AdaptadorPokemons.ViewHolderPokemons viewHolderPokemons, final int i) {
 
         final AdaptadorPokemons.ViewHolderPokemons v = viewHolderPokemons;
         viewHolderPokemons.progress.setVisibility(View.VISIBLE);
@@ -62,8 +63,23 @@ public class AdaptadorPokemons extends RecyclerView.Adapter<AdaptadorPokemons.Vi
                 })
                 .into(viewHolderPokemons.pokeImg);
 
-        viewHolderPokemons.parentLayout.setOnClickListener((view) -> {
-
+        viewHolderPokemons.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(context, "POSITION: " + listaPokemons.get(i), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, DetailviewActivity.class);
+                intent.putExtra("pokemonNumber", listaPokemons.get(i).getNumeroPokedex());
+                intent.putExtra("pokemonName", listaPokemons.get(i).getNombre());
+                intent.putExtra("pokemonType1", listaPokemons.get(i).getTipo_1());
+                intent.putExtra("pokemonType2", listaPokemons.get(i).getTipo_2());
+                intent.putExtra("pokemonAttack", listaPokemons.get(i).getAtaque());
+                intent.putExtra("pokemonDefense", listaPokemons.get(i).getDefensa());
+                intent.putExtra("pokemonStamina", listaPokemons.get(i).getResistencia());
+                intent.putExtra("pokemonEvolution", listaPokemons.get(i).getEvolucion());
+                intent.putExtra("pokemonCandyCostEvolution", listaPokemons.get(i).getCaramelos_evolucion());
+                intent.putExtra("pokemonKmCandyDistance", listaPokemons.get(i).getCaramelos_km_distancia());
+                context.startActivity(intent);
+            }
         });
 
 
@@ -83,7 +99,7 @@ public class AdaptadorPokemons extends RecyclerView.Adapter<AdaptadorPokemons.Vi
         ImageView pokeImg;
         TextView pokemonNumber, pokemonName;
         ProgressBar progress;
-        RelativeLayout parentLayout;
+        LinearLayout parentLayout;
 
 
         public ViewHolderPokemons(@NonNull View itemView) {

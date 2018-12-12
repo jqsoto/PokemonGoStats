@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /** Maneja el acceso a la base de datos. */
 public class DBManager extends SQLiteOpenHelper {
     public static final String DB_NOMBRE = "PokemonGoDB";
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 5;
 
     public static final String TABLA_POKEMON = "pokemon";
     public static final String POKEMON_COL_NUMERO = "_id";
@@ -26,6 +26,9 @@ public class DBManager extends SQLiteOpenHelper {
     public static final String POKEMON_COL_EVOLUCION = "evolucion";
     public static final String POKEMON_COL_CARAMELOS_EVOLUCION = "caramelosEvolucion";
     public static final String POKEMON_COL_KMDISTANCIA = "kmdistancia";
+
+    public static final String TABLA_COMENTARIOS = "comentario";
+    public static final String POKEMON_COL_COMENTARIO = "comment";
 
     private DBManager(Context context)
     {
@@ -63,6 +66,12 @@ public class DBManager extends SQLiteOpenHelper {
                     + POKEMON_COL_CARAMELOS_EVOLUCION + " string(10), "
                     + POKEMON_COL_KMDISTANCIA + " integer NOT NULL"
                     + " )");
+
+            db.execSQL( "CREATE TABLE IF NOT EXISTS " + TABLA_COMENTARIOS + "( "
+                    + POKEMON_COL_NUMERO + " integer NOT NULL, "
+                    + POKEMON_COL_COMENTARIO + " text NOT NULL,"
+                    + "PRIMARY KEY ( " + POKEMON_COL_NUMERO + ", " + POKEMON_COL_COMENTARIO + " )"
+                    + " )");
             db.setTransactionSuccessful();
         }
         catch(SQLException exc)
@@ -78,10 +87,10 @@ public class DBManager extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i("DBManager",
                 "DB: " + DB_NOMBRE + ": v" + oldVersion + " -> v" + newVersion);
-
         try {
             db.beginTransaction();
             db.execSQL("DROP TABLE IF EXISTS " + TABLA_POKEMON);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLA_COMENTARIOS);
             db.setTransactionSuccessful();
         } catch (SQLException exc) {
             Log.e("DBManager.onUpgrade", exc.getMessage());
@@ -144,6 +153,47 @@ public class DBManager extends SQLiteOpenHelper {
         cursor.close();
         return pokemon;
 
+    }
+
+    public boolean saveComment(Comment comment){
+
+        boolean toret = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put( POKEMON_COL_NUMERO, comment.getPokemonNumber() );
+        values.put( POKEMON_COL_COMENTARIO, comment.getComment() );
+
+        try {
+            db.beginTransaction();
+            db.insert( TABLA_COMENTARIOS, null, values );
+            db.setTransactionSuccessful();
+            toret = true;
+        } catch(SQLException exc)
+        {
+            Log.e( "DBManager.inserta.C", exc.getMessage() );
+        }
+        finally {
+            db.endTransaction();
+        }
+        return toret;
+    }
+
+
+    public ArrayList<Comment> getComments(String pokemonNumber){
+        ArrayList <Comment> comentarios = new ArrayList<Comment>();
+        Cursor cursor =  this.getReadableDatabase().query( TABLA_COMENTARIOS,
+                null, POKEMON_COL_NUMERO + "=?" , new String[]{ pokemonNumber }, null, null, null );
+
+        if ( cursor.moveToFirst() ) {
+            do {
+                comentarios.add(new Comment(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_COMENTARIO ))));
+            } while ( cursor.moveToNext() );
+        }
+
+        cursor.close();
+        return comentarios;
     }
 
 
