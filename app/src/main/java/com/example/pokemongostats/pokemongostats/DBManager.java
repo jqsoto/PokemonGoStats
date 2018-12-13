@@ -132,68 +132,27 @@ public class DBManager extends SQLiteOpenHelper {
      *  @param @String El id del pokemon.
      * @return Un Cursor con el Pokemon.
      */
-    public Pokemon getPokemon(String id){
-        Cursor cursor =  this.getReadableDatabase().query( TABLA_POKEMON,
-                null, POKEMON_COL_NUMERO + "=?" , new String[]{ id }, null, null, null );
+    public Pokemon getPokemon(String id) {
+        Cursor cursor = this.getReadableDatabase().query(TABLA_POKEMON,
+                null, POKEMON_COL_NUMERO + "=?", new String[]{id}, null, null, null);
         Pokemon pokemon = null;
-        if(cursor.moveToFirst() ){
-            pokemon =  new Pokemon(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
-                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_NOMBRE )),
-                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO1 )),
-                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO2 )),
-                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_ATAQUE )),
-                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_DEFENSA )),
-                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_RESISTENCIA )),
-                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_EVOLUCION )),
-                    cursor.getString( cursor.getColumnIndex(POKEMON_COL_CARAMELOS_EVOLUCION )),
-                    cursor.getInt( cursor.getColumnIndex(POKEMON_COL_KMDISTANCIA )));
+        if (cursor.moveToFirst()) {
+            pokemon = new Pokemon(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
+                    cursor.getString(cursor.getColumnIndex(POKEMON_COL_NOMBRE)),
+                    cursor.getString(cursor.getColumnIndex(POKEMON_COL_TIPO1)),
+                    cursor.getString(cursor.getColumnIndex(POKEMON_COL_TIPO2)),
+                    cursor.getInt(cursor.getColumnIndex(POKEMON_COL_ATAQUE)),
+                    cursor.getInt(cursor.getColumnIndex(POKEMON_COL_DEFENSA)),
+                    cursor.getInt(cursor.getColumnIndex(POKEMON_COL_RESISTENCIA)),
+                    cursor.getString(cursor.getColumnIndex(POKEMON_COL_EVOLUCION)),
+                    cursor.getString(cursor.getColumnIndex(POKEMON_COL_CARAMELOS_EVOLUCION)),
+                    cursor.getInt(cursor.getColumnIndex(POKEMON_COL_KMDISTANCIA)));
 
         }
 
         cursor.close();
         return pokemon;
 
-    }
-
-    public boolean saveComment(Comment comment){
-
-        boolean toret = false;
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put( POKEMON_COL_NUMERO, comment.getPokemonNumber() );
-        values.put( POKEMON_COL_COMENTARIO, comment.getComment() );
-
-        try {
-            db.beginTransaction();
-            db.insert( TABLA_COMENTARIOS, null, values );
-            db.setTransactionSuccessful();
-            toret = true;
-        } catch(SQLException exc)
-        {
-            Log.e( "DBManager.inserta.C", exc.getMessage() );
-        }
-        finally {
-            db.endTransaction();
-        }
-        return toret;
-    }
-
-
-    public ArrayList<Comment> getComments(String pokemonNumber){
-        ArrayList <Comment> comentarios = new ArrayList<Comment>();
-        Cursor cursor =  this.getReadableDatabase().query( TABLA_COMENTARIOS,
-                null, POKEMON_COL_NUMERO + "=?" , new String[]{ pokemonNumber }, null, null, null );
-
-        if ( cursor.moveToFirst() ) {
-            do {
-                comentarios.add(new Comment(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
-                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_COMENTARIO ))));
-            } while ( cursor.moveToNext() );
-        }
-
-        cursor.close();
-        return comentarios;
     }
 
 
@@ -245,6 +204,92 @@ public class DBManager extends SQLiteOpenHelper {
             db.endTransaction();
         }
         return toret;
+    }
+
+    public boolean saveComment(Comment comment){
+
+        boolean toret = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put( POKEMON_COL_NUMERO, String.valueOf(comment.getPokemonNumber()) );
+        values.put( POKEMON_COL_COMENTARIO, comment.getComment() );
+
+        try {
+            db.beginTransaction();
+            db.insert( TABLA_COMENTARIOS, null, values );
+            db.setTransactionSuccessful();
+            toret = true;
+        } catch(SQLException exc)
+        {
+            Log.e( "DBManager.inserta.C", exc.getMessage() );
+        }
+        finally {
+            db.endTransaction();
+        }
+        return toret;
+    }
+
+
+    public ArrayList<Comment> getComments(String pokemonNumber){
+        ArrayList <Comment> comentarios = new ArrayList<Comment>();
+        Cursor cursor =  this.getReadableDatabase().query( TABLA_COMENTARIOS,
+                null, POKEMON_COL_NUMERO + "=?" , new String[]{ pokemonNumber }, null, null, null );
+
+        if ( cursor.moveToFirst() ) {
+            do {
+                comentarios.add(new Comment(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_COMENTARIO ))));
+            } while ( cursor.moveToNext() );
+        }
+
+        cursor.close();
+        return comentarios;
+    }
+
+    public boolean deleteComment(Comment comment){
+        {
+            boolean toret = false;
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            try {
+                db.beginTransaction();
+                db.delete( TABLA_COMENTARIOS, POKEMON_COL_NUMERO + "=? AND " + POKEMON_COL_COMENTARIO + "=?",
+                        new String[]{ String.valueOf(comment.getPokemonNumber()), comment.getComment() });
+                db.setTransactionSuccessful();
+                toret = true;
+            } catch(SQLException exc) {
+                Log.e( "DBManager.elimina", exc.getMessage() );
+            } finally {
+                db.endTransaction();
+            }
+
+            return toret;
+        }
+    }
+
+    public ArrayList<Pokemon> searchType(String type){
+        ArrayList<Pokemon> listaPokemonType = new ArrayList<Pokemon>();
+
+        Cursor cursor = this.getReadableDatabase().query(TABLA_POKEMON,
+                null, POKEMON_COL_TIPO1 + "=? OR " + POKEMON_COL_TIPO2 + "=?", new String[]{type, type}, null, null, null);
+
+        if ( cursor.moveToFirst() ) {
+            do {
+                listaPokemonType.add(new Pokemon(cursor.getInt(cursor.getColumnIndex(POKEMON_COL_NUMERO)),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_NOMBRE )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO1 )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_TIPO2 )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_ATAQUE )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_DEFENSA )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_RESISTENCIA )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_EVOLUCION )),
+                        cursor.getString( cursor.getColumnIndex(POKEMON_COL_CARAMELOS_EVOLUCION )),
+                        cursor.getInt( cursor.getColumnIndex(POKEMON_COL_KMDISTANCIA ))));
+            } while ( cursor.moveToNext() );
+        }
+
+        return listaPokemonType;
     }
 
     /** Elimina un elemento de la base de datos

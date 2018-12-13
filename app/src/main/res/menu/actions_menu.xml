@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/type_bug" android:id="@+id/type_bug" />
+    <item android:title="@string/type_dark" android:id="@+id/type_dark" />
+    <item android:title="@string/type_dragon" android:id="@+id/type_dragon" />
+    <item android:title="@string/type_electric" android:id="@+id/type_electric" />
+    <item android:title="@string/type_fairy" android:id="@+id/type_fairy" />
+    <item android:title="@string/type_fighting" android:id="@+id/type_fighting" />
+    <item android:title="@string/type_fire" android:id="@+id/type_fire" />
+    <item android:title="@string/type_flying" android:id="@+id/type_flying" />
+    <item android:title="@string/type_ghost" android:id="@+id/type_ghost" />
+    <item android:title="@string/type_grass" android:id="@+id/type_grass" />
+    <item android:title="@string/type_ground" android:id="@+id/type_ground" />
+    <item android:title="@string/type_ice" android:id="@+id/type_ice" />
+    <item android:title="@string/type_normal" android:id="@+id/type_normal" />
+    <item android:title="@string/type_poison" android:id="@+id/type_poison" />
+    <item android:title="@string/type_psychic" android:id="@+id/type_psychic" />
+    <item android:title="@string/type_rock" android:id="@+id/type_rock" />
+    <item android:title="@string/type_steel" android:id="@+id/type_steel" />
+    <item android:title="@string/type_water" android:id="@+id/type_water" />
+</menu>

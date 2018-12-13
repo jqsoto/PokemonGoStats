@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Pokemon Go Stats</string>
+    <string name="type_bug">Tipo Bicho</string>
+    <string name="type_dark">Tipo Siniestro</string>
+    <string name="type_dragon">Tipo Dragon</string>
+    <string name="type_electric">Tipo Electrico</string>
+    <string name="type_fairy">Tipo Hada</string>
+    <string name="type_fighting">Tipo Lucha</string>
+    <string name="type_fire">Tipo Fuego</string>
+    <string name="type_flying">Tipo Volador</string>
+    <string name="type_ground">Tipo Tierra</string>
+    <string name="type_grass">Tipo Planta</string>
+    <string name="type_ghost">Tipo Fantasma</string>
+    <string name="type_ice">Tipo Hielo</string>
+    <string name="type_normal">Tipo Normal</string>
+    <string name="type_poison">Tipo Veneno</string>
+    <string name="type_psychic">Tipo Psiquico</string>
+    <string name="type_rock">Tipo Roca</string>
+    <string name="type_steel">Tipo Metal</string>
+    <string name="type_water">Tipo Agua</string>
 </resources>

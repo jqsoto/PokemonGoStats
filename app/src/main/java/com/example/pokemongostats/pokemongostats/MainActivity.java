@@ -1,11 +1,14 @@
 package com.example.pokemongostats.pokemongostats;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,110 @@ public class MainActivity extends AppCompatActivity {
         this.creaLista();
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        super.onCreateOptionsMenu( menu );
+        this.getMenuInflater().inflate( R.menu.actions_menu, menu );
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem)
+    {
+        boolean toret = false;
+
+        switch( menuItem.getItemId() ) {
+            case R.id.type_bug:
+                this.searchType( "bug" );
+                toret = true;
+                break;
+            case R.id.type_dark:
+                this.searchType( "dark" );
+                toret = true;
+                break;
+            case R.id.type_dragon:
+                this.searchType( "dragon" );
+                toret = true;
+                break;
+            case R.id.type_electric:
+                this.searchType( "electric" );
+                toret = true;
+                break;
+            case R.id.type_fairy:
+                this.searchType( "fairy" );
+                toret = true;
+                break;
+            case R.id.type_fighting:
+                this.searchType( "fighting" );
+                toret = true;
+                break;
+            case R.id.type_fire:
+                this.searchType( "fire" );
+                toret = true;
+                break;
+            case R.id.type_flying:
+                this.searchType( "flying" );
+                toret = true;
+                break;
+            case R.id.type_ghost:
+                this.searchType( "ghost" );
+                toret = true;
+                break;
+            case R.id.type_grass:
+                this.searchType( "grass" );
+                toret = true;
+                break;
+            case R.id.type_ground:
+                this.searchType( "ground" );
+                toret = true;
+                break;
+            case R.id.type_ice:
+                this.searchType( "ice" );
+                toret = true;
+                break;
+            case R.id.type_normal:
+                this.searchType( "normal" );
+                toret = true;
+                break;
+            case R.id.type_poison:
+                this.searchType( "poison" );
+                toret = true;
+                break;
+            case R.id.type_psychic:
+                this.searchType( "psychic" );
+                toret = true;
+                break;
+            case R.id.type_rock:
+                this.searchType( "rock" );
+                toret = true;
+                break;
+            case R.id.type_steel:
+                this.searchType( "steel" );
+                toret = true;
+                break;
+            case R.id.type_water:
+                this.searchType( "water" );
+                toret = true;
+                break;
+        }
+
+        return toret;
+    }
+
+    private void searchType(String type){
+        ArrayList<Pokemon> listaPokemonsTipo = gestorDB.searchType(type);
+        Intent intent = new Intent(this.getApplicationContext(), TypeViewActivity.class);
+        System.out.print("Lista size:" + listaPokemonsTipo.size());
+        for (int i = 0; i < listaPokemonsTipo.size(); i++){
+            System.out.print("Pokemon: " + listaPokemonsTipo.get(i).getNombre() + " -- Tipo: " + listaPokemonsTipo.get(i).getTipo_1() + " - " + listaPokemonsTipo.get(i).getTipo_2());
+            intent.putExtra( String.valueOf(listaPokemonsTipo.get(i).getNumeroPokedex()), listaPokemonsTipo.get(i).getNumeroPokedex());
+        }
+
+        MainActivity.this.startActivity(intent);
+    }
+
 
     /* Comprueba si y ahay datos cargados en la BD*/
     private void checkData(){

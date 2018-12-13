@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,15 +37,21 @@ public class DetailviewActivity extends AppCompatActivity {
     private String pokemonCandyCostEvolucion;
     private int pokemonCandyDistance;
 
+    private ListView listaComments;
+    private ArrayList<Comment> comentarios;
+    private AdaptadorComentarios adaptadorComentarios;
+
+    public DetailviewActivity() {}
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailview);
-
-        this.gestorDB = DBManager.getManager( this.getApplicationContext() ); // Conexión con la BD
+        final DBManager gestorDB = DBManager.getManager( this.getApplicationContext() );
 
         this.getExtrasContent();
-        this.cargarComentarios();
+        this.cargarComentarios(gestorDB);
+
 
         Button saveButton = findViewById( R.id.commentButton );
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -53,12 +60,33 @@ public class DetailviewActivity extends AppCompatActivity {
 
                 EditText comentarioEdit = findViewById( R.id.comment );
                 String comentario = comentarioEdit.getText().toString();
+                TextView number = findViewById(R.id.lblpokemonNumber);
 
-                Toast.makeText(getApplicationContext(), "Mensaje: " + comentario, Toast.LENGTH_SHORT).show();
-
+                gestorDB.saveComment(new Comment(Integer.parseInt(number.getText().toString()), comentario));
+                adaptadorComentarios.notifyDataSetChanged();
             }
         });
 
+        listaComments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                boolean toret;
+                if( i >= 0 ){
+                    Toast.makeText(getApplicationContext(), "ONLOOONG", Toast.LENGTH_LONG).show();
+                    TextView lblcomment = view.findViewById(R.id.comment);
+                    String commentString = lblcomment.getText().toString();
+                    Comment comment = new Comment(comentarios.get(i).getPokemonNumber(), commentString);
+                    gestorDB.deleteComment(comment);
+                    adaptadorComentarios.notifyDataSetChanged();
+                    toret = true;
+                }
+                else
+                    toret = false;
+
+                return toret;
+            }
+        });
 
     }
 
@@ -273,19 +301,14 @@ public class DetailviewActivity extends AppCompatActivity {
         }
     }
 
-    private void cargarComentarios()
+    private void cargarComentarios(DBManager gestorDB)
     {
-        ListView listaComments = findViewById(R.id.commentsView);
-
+        listaComments = findViewById(R.id.commentsView);
         comentarios = gestorDB.getComments(String.valueOf(this.pokemonNumber));
-
-        this.adaptadorComentarios =  new AdaptadorComentarios( comentarios , this);
+        adaptadorComentarios = new AdaptadorComentarios( comentarios , this, gestorDB);
         listaComments.setAdapter(adaptadorComentarios);
 
     }
 
-    private DBManager gestorDB;
-    ArrayList<Comment> comentarios;
-    AdaptadorComentarios adaptadorComentarios;
 
 }
