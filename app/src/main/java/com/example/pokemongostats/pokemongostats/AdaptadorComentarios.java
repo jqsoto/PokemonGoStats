@@ -17,14 +17,13 @@ public class AdaptadorComentarios extends ArrayAdapter<Comment> {
 
     private Context context;
     private ArrayList<Comment> comments;
-    private DBManager db;
+    private DBManager gestorDB;
 
-    public AdaptadorComentarios(ArrayList<Comment> comments, Context context, DBManager db) {
+    public AdaptadorComentarios(ArrayList<Comment> comments, Context context, DBManager gestorDB) {
         super(context, 0, comments);
         this.comments = comments;
         this.context = context;
-        this.db = db;
-
+        this.gestorDB = gestorDB;
     }
 
     @Override
@@ -39,13 +38,20 @@ public class AdaptadorComentarios extends ArrayAdapter<Comment> {
         }
         // Rellenar los datos
         final TextView lblNombre = view.findViewById( R.id.comment );
+        final TextView lblPosition = view.findViewById( R.id.position );
 
         lblNombre.setText( comments.get(position).getComment() );
-
-
+        lblPosition.setText( String.valueOf(position+1) );
 
         return view;
     }
+
+    @Override
+    public void remove(Comment comment){
+        gestorDB.deleteComment(comment);
+
+    }
+
 
 
 

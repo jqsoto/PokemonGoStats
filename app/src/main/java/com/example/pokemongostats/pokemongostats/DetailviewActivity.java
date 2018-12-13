@@ -1,5 +1,6 @@
 package com.example.pokemongostats.pokemongostats;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,10 +38,6 @@ public class DetailviewActivity extends AppCompatActivity {
     private String pokemonCandyCostEvolucion;
     private int pokemonCandyDistance;
 
-    private ListView listaComments;
-    private ArrayList<Comment> comentarios;
-    private AdaptadorComentarios adaptadorComentarios;
-
     public DetailviewActivity() {}
 
     @Override
@@ -50,45 +47,40 @@ public class DetailviewActivity extends AppCompatActivity {
         final DBManager gestorDB = DBManager.getManager( this.getApplicationContext() );
 
         this.getExtrasContent();
-        this.cargarComentarios(gestorDB);
-
 
         Button saveButton = findViewById( R.id.commentButton );
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+
                 EditText comentarioEdit = findViewById( R.id.comment );
                 String comentario = comentarioEdit.getText().toString();
                 TextView number = findViewById(R.id.lblpokemonNumber);
-
-                gestorDB.saveComment(new Comment(Integer.parseInt(number.getText().toString()), comentario));
-                adaptadorComentarios.notifyDataSetChanged();
+                Comment comment = new Comment(Integer.parseInt(number.getText().toString()), comentario);
+                if(gestorDB.hasThisComment(comment)){
+                    Toast.makeText(getApplicationContext(), getString(R.string.already_comment), Toast.LENGTH_LONG).show();
+                }else{
+                    gestorDB.saveComment(comment);
+                    Toast.makeText(getApplicationContext(), getString(R.string.added_comment), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
-        listaComments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
-            {
-                boolean toret;
-                if( i >= 0 ){
-                    Toast.makeText(getApplicationContext(), "ONLOOONG", Toast.LENGTH_LONG).show();
-                    TextView lblcomment = view.findViewById(R.id.comment);
-                    String commentString = lblcomment.getText().toString();
-                    Comment comment = new Comment(comentarios.get(i).getPokemonNumber(), commentString);
-                    gestorDB.deleteComment(comment);
-                    adaptadorComentarios.notifyDataSetChanged();
-                    toret = true;
-                }
-                else
-                    toret = false;
+        Button viewComments = findViewById(R.id.viewComments);
 
-                return toret;
+        viewComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CommentsActivity.class);
+                intent.putExtra("pokemonNumber", pokemonNumber);
+                DetailviewActivity.this.startActivity(intent);
             }
         });
 
     }
+
+
 
     private void getExtrasContent(){
         Log.d(TAG, "getExtrasContent: checking content");
@@ -103,7 +95,7 @@ public class DetailviewActivity extends AppCompatActivity {
             pokemonAttack = getIntent().getIntExtra("pokemonAttack", 0);
             pokemonDefense = getIntent().getIntExtra("pokemonDefense", 0);
             pokemonStamina = getIntent().getIntExtra("pokemonStamina", 0);
-            pokemonCandyDistance = getIntent().getIntExtra("pokemonCandyDistance", 0);
+            pokemonCandyDistance = getIntent().getIntExtra("pokemonKmCandyDistance", 0);
         }
 
         if(getIntent().hasExtra("pokemonType2"))
@@ -139,14 +131,17 @@ public class DetailviewActivity extends AppCompatActivity {
         TextView lblCandyKmDistance = findViewById(R.id.lblBuddyKm);
 
         lblpokemonNumber.setText(String.valueOf(pokemonNumber));
-        lblpokemonName.setText(pokemonName);
+        lblpokemonName.setText(pokemonName.substring(0, 1).toUpperCase() + pokemonName.substring(1));
         lblAttack.setText(String.valueOf(pokemonAttack));
         lblDefense.setText(String.valueOf(pokemonDefense));
         lblStamina.setText(String.valueOf(pokemonStamina));
 
-        lblEvolutionName.setText(pokemonEvolution);
+        if(pokemonEvolution != null)
+            lblEvolutionName.setText(pokemonEvolution.substring(0, 1).toUpperCase() + pokemonEvolution.substring(1, pokemonEvolution.length()));
+
+
         lblEvolutionCandyCost.setText(pokemonCandyCostEvolucion);
-        lblCandyKmDistance.setText(String.valueOf(pokemonCandyDistance));
+        lblCandyKmDistance.setText(String.valueOf(pokemonCandyDistance) + " " + getString(R.string.kilometers) );
 
 
 
@@ -257,7 +252,7 @@ public class DetailviewActivity extends AppCompatActivity {
                     pokeType2.setImageResource(R.drawable.type_ice);
                     break;
                 case "dark":
-                    pokeType2.setImageResource(R.drawable.type_steel);
+                    pokeType2.setImageResource(R.drawable.type_dark);
                     break;
                 case "electric":
                     pokeType2.setImageResource(R.drawable.type_electric);
@@ -301,14 +296,10 @@ public class DetailviewActivity extends AppCompatActivity {
         }
     }
 
-    private void cargarComentarios(DBManager gestorDB)
+    @Override
+    public void onPause()
     {
-        listaComments = findViewById(R.id.commentsView);
-        comentarios = gestorDB.getComments(String.valueOf(this.pokemonNumber));
-        adaptadorComentarios = new AdaptadorComentarios( comentarios , this, gestorDB);
-        listaComments.setAdapter(adaptadorComentarios);
-
+        super.onPause();
     }
-
 
 }

@@ -103,19 +103,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Ataque"
+                        android:text="@string/attack"
                         android:textColor="@color/colorWhite" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Defensa"
+                        android:text="@string/defense"
                         android:textColor="@color/colorWhite" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Aguante"
+                        android:text="@string/stamina"
                         android:textColor="@color/colorWhite" />
                 </LinearLayout>
 
@@ -166,19 +166,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Evolución"
+                        android:text="@string/evolution"
                         android:textColor="@color/colorWhite" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Caramelos para evolución"
+                        android:text="@string/evolutionCandy"
                         android:textColor="@color/colorWhite" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Km para caramelo"
+                        android:text="@string/distanceCandyKm"
                         android:textColor="@color/colorWhite" />
 
 
@@ -220,15 +220,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".5"
                 android:orientation="vertical"
-                android:paddingTop="20dp">
+                android:paddingTop="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <TextView
-                    android:id="@+id/textView17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:lines="2"
-                    android:text="Comentarios"
+                    android:text="@string/comments"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:textColor="@color/colorWhite" />
@@ -249,16 +250,19 @@
                     android:id="@+id/commentButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Añadir Copmentario"
+                    android:text="@string/add_comment"
                     android:background="@drawable/mybutton"
                     android:textStyle="bold"/>
 
-
-                <ListView
-                    android:id="@+id/commentsView"
+                <Button
+                    android:id="@+id/viewComments"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </ListView>
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_comments"
+                    android:background="@drawable/mybutton"
+                    android:textStyle="bold"
+                    android:layout_marginTop="15dp"/>
+
 
             </LinearLayout>
 

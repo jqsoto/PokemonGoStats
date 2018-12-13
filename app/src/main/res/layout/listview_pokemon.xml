@@ -22,7 +22,7 @@
                     android:layout_height="80dp"
                     android:layout_weight="0.4"
                     android:paddingLeft="10dp"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
 
                 <ProgressBar
                     android:id="@+id/progress"

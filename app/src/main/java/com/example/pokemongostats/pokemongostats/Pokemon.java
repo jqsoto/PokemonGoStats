@@ -38,27 +38,7 @@ public class Pokemon {
             this.tipo_2 = "vacio";
     }
 
-    /*public String toString()
-    {
-        String toret = "";
-
-        final String TIPO2 = this.getTipo_2();
-        final String EVOLUCION = this.getEvolucion();
-        final String CARAMELOS_EVOLUCION = this.getCaramelos_evolucion();
-
-        if ( TIPO2 != null
-                && !TIPO2.isEmpty() && EVOLUCION != null && EVOLUCION.isEmpty() && CARAMELOS_EVOLUCION.isEmpty() )
-        {
-            toret = String.format( "%s (%s - %s)", this.getNombre(), this.getTipo_1(), this.getTipo_2() );
-        } else {
-            toret = this.getNombre() + " wedqw";
-        }
-        return toret;
-
-    }*/
-
     public void prueba(){
-        //Log.i("tag", "Pokemon Numero: " );
         System.out.println("Pokemon Numero: " + this.getNumeroPokedex());
         System.out.println("Nombre Pokemon : " + this.getNombre());
         System.out.println("Tipo 1: " + this.getTipo_1());

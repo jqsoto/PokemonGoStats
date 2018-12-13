@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         pokemonList = this.gestorDB.getPokemons();
 
-        System.out.println("Tipo" + this.gestorDB.getPokemon("452").getTipo_2());
-
         this.creaLista();
 
     }
@@ -154,6 +152,13 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onPause();
         this.gestorDB.close();
+    }
+
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        this.gestorDB = DBManager.getManager( this.getApplicationContext() );
     }
 
     private String readJSON(){

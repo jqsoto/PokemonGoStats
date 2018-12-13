@@ -21,5 +21,6 @@
         </activity>
         <activity android:name=".DetailviewActivity" />
         <activity android:name=".TypeViewActivity" />
+        <activity android:name=".CommentsActivity" />
     </application>
 </manifest>

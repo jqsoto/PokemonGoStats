@@ -18,4 +18,17 @@
     <string name="type_rock">Tipo Roca</string>
     <string name="type_steel">Tipo Metal</string>
     <string name="type_water">Tipo Agua</string>
+    <string name="kilometers">Kilómetros</string>
+    <string name="add_comment">Añadir Comentario</string>
+    <string name="view_comments">Ver Comentarios</string>
+    <string name="added_comment">Comentario Añadido</string>
+    <string name="deleted_comment">Comentario Borrado</string>
+    <string name="already_comment">Este comentario ya esta en la base de datos</string>
+    <string name="attack">Ataque</string>
+    <string name="defense">Defensa</string>
+    <string name="stamina">Aguante</string>
+    <string name="evolution">Evolución</string>
+    <string name="evolutionCandy">Caramelos para evolución</string>
+    <string name="distanceCandyKm">Km para caramelo</string>
+    <string name="comments">Comentarios</string>
 </resources>

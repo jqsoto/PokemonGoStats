@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /** Maneja el acceso a la base de datos. */
 public class DBManager extends SQLiteOpenHelper {
     public static final String DB_NOMBRE = "PokemonGoDB";
-    public static final int DB_VERSION = 5;
+    public static final int DB_VERSION = 7;
 
     public static final String TABLA_POKEMON = "pokemon";
     public static final String POKEMON_COL_NUMERO = "_id";
@@ -265,6 +265,21 @@ public class DBManager extends SQLiteOpenHelper {
             }
 
             return toret;
+        }
+    }
+
+    public boolean hasThisComment(Comment comment) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = null;
+        cursor = this.getReadableDatabase().query( TABLA_COMENTARIOS,
+                null, POKEMON_COL_NUMERO + "=? AND " + POKEMON_COL_COMENTARIO + "=?",
+                new String[]{ String.valueOf(comment.getPokemonNumber()), comment.getComment()}, null, null, null );
+
+        if ( cursor.getCount() > 0 ) {
+            return true;
+        } else {
+            return false;
         }
     }
 
