@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
         pokemonList = this.gestorDB.getPokemons();
 
+        System.out.println("Tipo" + this.gestorDB.getPokemon("452").getTipo_2());
+
         this.creaLista();
 
     }

@@ -291,29 +291,4 @@ public class DBManager extends SQLiteOpenHelper {
 
         return listaPokemonType;
     }
-
-    /** Elimina un elemento de la base de datos
-     * @param nombre El identificador del elemento.
-     * @return true si se pudo eliminar, false en otro caso.
-     */
-    /*
-    public boolean eliminaItem(String nombre)
-    {
-        boolean toret = false;
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        try {
-            db.beginTransaction();
-            db.delete( TABLA_COMPRA, COMPRA_COL_NOMBRE + "=?", new String[]{ nombre } );
-            db.setTransactionSuccessful();
-            toret = true;
-        } catch(SQLException exc) {
-            Log.e( "DBManager.elimina", exc.getMessage() );
-        } finally {
-            db.endTransaction();
-        }
-
-        return toret;
-    }
-    */
 }

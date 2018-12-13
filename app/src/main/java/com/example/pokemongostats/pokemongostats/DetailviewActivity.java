@@ -196,7 +196,7 @@ public class DetailviewActivity extends AppCompatActivity {
                     pokeType1.setImageResource(R.drawable.type_ice);
                     break;
                 case "dark":
-                    pokeType1.setImageResource(R.drawable.type_steel);
+                    pokeType1.setImageResource(R.drawable.type_dark);
                     break;
                 case "electric":
                     pokeType1.setImageResource(R.drawable.type_electric);
